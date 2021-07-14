@@ -6,7 +6,10 @@
 ||aps.hearstnp.com^$script,image
 ! brave.com specfic filters
 @@||ads.brave.software^$first-party
+@@||ads-admin.bravesoftware.com^$first-party
 @@||ads.bravesoftware.com^$first-party
+@@||ads-admin.brave.com^$first-party
+@@||ads-admin.brave.software^$first-party
 @@||ads.brave.com^$first-party
 ! stats.brave.com
 stats.brave.com#@#adsContent
@@ -19,6 +22,9 @@ stats.brave.com#@#adsContent
 ||vidazoo.com/proxy^$third-party
 ||mediabong.net^$third-party
 ||imprvdosrv.com^$third-party
+! CNAME: linkvertise.com
+@@||taboola.com/libtrc/linkvertise-link-to/loader.js$domain=linkvertise.com
+@@||taboola.map.fastly.net^$domain=linkvertise.com
 ! CNAME: https://yab.yomiuri.co.jp/adv/presage/3.html
 @@||yab.yomiuri.co.jp/adv/$first-party
 @@||omicroncdn.net^$domain=yab.yomiuri.co.jp
@@ -33,12 +39,15 @@ stats.brave.com#@#adsContent
 ||theatlantic.blueconic.net$domain=theatlantic.com
 ||theatlantic.com/please-support-us^
 ! youtube ads
+youtube.com,youtube-nocookie.com##+js(json-prune, 2.playerResponse.adPlacements playerResponse.adPlacements playerResponse.playerAds adPlacements playerAds)
 youtube.com,youtube-nocookie.com##+js(json-prune, [].playerResponse.adPlacements)
 youtube.com,youtube-nocookie.com##+js(json-prune, [].playerResponse.playerAds)
+youtube.com,youtube-nocookie.com##+js(json-prune, 2.playerResponse.adPlacements)
 youtube.com,youtube-nocookie.com##+js(json-prune, playerResponse.adPlacements)
 youtube.com,youtube-nocookie.com##+js(json-prune, playerResponse.playerAds)
 youtube.com,youtube-nocookie.com##+js(json-prune, adPlacements)
 youtube.com,youtube-nocookie.com##+js(json-prune, playerAds)
+youtube.com##+js(set, ytInitialPlayerResponse.adPlacements, null)
 ! Fix browser lockup on skepticalscience.com (https://github.com/brave/brave-browser/issues/5406)
 ||skepticalscience.net/widgets/heat_widget/js/heat_content.js$script,domain=skepticalscience.com
 ! adops.com unusable without this
@@ -73,6 +82,13 @@ twitter.com##[style]>div>div>[data-testid=placementTracking]
 ||privacy-mgmt.com^$third-party
 ||sp-prod.net^$third-party
 @@||notice.sp-prod.net^$subdocument,domain=telegraph.co.uk
+@@||cdn.privacy-mgmt.com/wrapper/$xmlhttprequest,domain=spiegel.de
+@@||cdn.privacy-mgmt.com/index.html$subdocument,domain=spiegel.de
+@@||cdn.privacy-mgmt.com/consent/$subdocument,domain=spiegel.de
+! Scroll bar-consent
+collegeconfidential.com##body:style(overflow: auto !important; max-height: 1px !important;)
+! Fix preloader (facebook check)
+igniteunmc.com##.preloader
 ! Brave-social (temp)
 ! List used by Brave for preventing social elements from loading
 !
@@ -89,8 +105,6 @@ twitter.com##[style]>div>div>[data-testid=placementTracking]
 ||platform.linkedin.com^$third-party
 ||licdn.com^$third-party,domain=~linkedin.com
 @@||licdn.com^$domain=linkedin.com
-! Outbrain
-||outbrain.com^$third-party,domain=~sphere.com
 ! Outbrain elements
 ###around-the-web
 ###g-outbrain
@@ -149,8 +163,6 @@ twitter.com##[style]>div>div>[data-testid=placementTracking]
 @@||platform.linkedin.com^$tag=linked-in-embeds
 ! Fix sign in icon on https://app.mysms.com/#login
 @@||developers.google.com/identity/$image,domain=mysms.com
-! Adblock-Tracking: speedtest.com
-@@||speedtest.net/javascript/ads.js$script,domain=speedtest.net
 ! vresp.com (https://community.brave.com/t/cant-see-captcha-on-form/67187)
 @@||captcha.vresp.com^$domain=lawfirmkpi.com
 ! https://community.brave.com/t/ad-not-bloked-properly/63628
@@ -175,8 +187,6 @@ twitter.com##[style]>div>div>[data-testid=placementTracking]
 ! Fix nordpass/protomail clickthrough on ios
 @@/aff_c?offer_id=
 @@?offer_id=*&aff_id=
-! Fix Anti-adblock message https://github.com/uBlockOrigin/uAssets/pull/8276
-mail.yahoo.com##.gl_C.ab_C.I_Zjpytw.Z_3mRud
 ! ca.yahoo.com (ios)
 /av/ads/*$domain=yahoo.com
 ! https://www.nintendo.co.jp/ring/index.html (https://github.com/brave/brave-browser/issues/11448)
@@ -185,8 +195,6 @@ mail.yahoo.com##.gl_C.ab_C.I_Zjpytw.Z_3mRud
 @@||suumo.jp/sp/js/beacon.js$script,domain=suumo.jp
 ! usps.com fix (ios)
 @@||tools.usps.com/go/scripts/tracking.js$script,domain=tools.usps.com
-! Adblock-Tracking: imgbox.com
-@@||imgbox.com/site_ads.js$script,domain=imgbox.com
 ! Fix startpage ads
 startpage.com###gcsa-top
 ! weather.com "Your privacy" dialogbox
@@ -195,8 +203,6 @@ startpage.com###gcsa-top
 @@||awemwh.com^$media,domain=thothub.tv
 ! Fix https://github.com/brave/brave-browser/issues/4507 (mirrors uBO fix, rewritten so that brave/ad-block supports)
 ||washingtonpost.com/pb/api/*/adblocker-feature$xmlhttprequest,first-party
-! Fix blankpage issue https://github.com/brave/brave-browser/issues/4049
-||dianomi.com/cgi-bin/smartads.pl$xmlhttprequest,domain=inc.com
 ! Fix onesignal.com example push notifications
 @@||googletagmanager.com/gtm.js$script,domain=onesignal.com
 ! Fix for https://www.home.neustar/ (blank page)
@@ -215,9 +221,12 @@ livemint.com##+js(aeld, DOMContentLoaded)
 uptostream.com,tirexo.lol##+js(acis, window.a)
 @@||tirexo.lol^$generichide
 ! portscanning script
-sciencedirect.com,ebay.com,ebay-kleinanzeigen.de##+js(acis, tmx_post_session_params_fixed)
+sciencedirect.com,ebay.com,ebay-kleinanzeigen.de,tdbank.com##+js(acis, tmx_post_session_params_fixed)
 ! megaup.net
 megaup.net#@#.adBanner
+! slate.com Anti-adblock workaround https://github.com/brave/brave-browser/issues/15702
+||tinypass.com^$domain=slate.com
+@@||id.tinypass.com^$domain=slate.com
 ! Anti-adblock: dianomi-anti-adblock
 @@||pcwelt.de^$generichide
 @@||formel1.de^$generichide
@@ -231,40 +240,74 @@ reuters.com,hardwareluxx.de,formel1.de,golem.de,finanzen.net,autobild.de,gamesta
 ||s3.reutersmedia.net/resources/*&rtn=$image
 ! Anti-adblock message cinemablend.com (ported from uBO Annoyances)
 cinemablend.com##+js(abort-on-property-read, __cmpGdprAppliesGlobally)
+! Anti-adblock message suncalc.org (ported from uBO Annoyances)
+###adsGross1
+###adsKlein
 ! chip.de
 ||mms.chip.de^
 ! Anti-adblock (Brave fix on  https://github.com/brave/brave-browser/issues/12737)
 @@||static.adsafeprotected.com/vans-adapter-google-ima.js$script,domain=motorsport.tv|motorsport.com
 @@||imasdk.googleapis.com/js/sdkloader/ima3.js$script,domain=motorsport.tv|motorsport.com
-! Temp fix for CBS All Access (https://github.com/brave/brave-browser/issues/12705)
-@@||s0.2mdn.net/instream/video/client.js$script,domain=cbs.com
-@@||adservice.google.com/adsid/integrator.js$script,domain=cbs.com
-@@||tags.tiqcdn.com/utag/cbsi/cbscomsite/prod/utag.js$script,domain=cbs.com
-@@||securepubads.g.doubleclick.net/tag/js/gpt.js$script,domain=cbs.com
+! Temp fix for CBS/Paramountplus (https://github.com/brave/brave-browser/issues/12705)
+@@||s0.2mdn.net/instream/video/client.js$script,domain=cbs.com|paramountplus.com
+||ad.doubleclick.net^$image,redirect=1x1.gif,domain=cbs.com|paramountplus.com
 ! Anti-adblock: concert.io (vox sites)
-@@||vox-cdn.com/packs/concert_ads-$script,domain=theverge.com|eater.com|polygon.com|vox.com|sbnation.com|curbed.com|theringer.com|mmafighting.com|racked.com|mmamania.com|funnyordie.com|riftherald.com
-theverge.com,vox.com,eater.com,polygon.com,sbnation.com,curbed.com,theringer.com,mmafighting.com,racked.com,mmamania.com,funnyordie.com,riftherald.com##+js(nostif, adsBlocked)
-theverge.com,vox.com,eater.com,polygon.com,sbnation.com,curbed.com,theringer.com,mmafighting.com,racked.com,mmamania.com,funnyordie.com,riftherald.com##.adblock-allowlist-messaging__wrapper
+chicago.suntimes.com,theverge.com,vox.com,eater.com,polygon.com,sbnation.com,curbed.com,theringer.com,mmafighting.com,racked.com,mmamania.com,funnyordie.com,riftherald.com##+js(nostif, adsBlocked)
+chicago.suntimes.com,theverge.com,vox.com,eater.com,polygon.com,sbnation.com,curbed.com,theringer.com,mmafighting.com,racked.com,mmamania.com,funnyordie.com,riftherald.com##.adblock-allowlist-messaging__wrapper
 ||concert.io/lib/adblock/$subdocument
+! uBO-redirect work around nation.africa (Anti-adblock)
+@@||evolok.net/acd/api/$xmlhttprequest,domain=nation.africa
+! uBO-redirect work around turreta.com (Anti-adblock)
+@@||pagead2.googlesyndication.com/pagead/js/adsbygoogle.js$script,domain=turreta.com
+! uBO-redirect work around akwam.cc (Anti-adblock) 
+@@||pagead2.googlesyndication.com/pagead/js/adsbygoogle.js$domain=akwam.cc
+! uBO-redirect work around gbnews.uk (Anti-adblock)
+@@||imasdk.googleapis.com/js/sdkloader/ima3.js$script,domain=gbnews.uk
+akwam.cc##+js(acis, eval, ignielAdBlock)
+! uBO-redirect work around scat.gold
+@@||pagead2.googlesyndication.com/pagead/js/adsbygoogle.js$domain=scat.gold
+! uBO-redirect work around golf.com https://github.com/uBlockOrigin/uAssets/pull/8805
+@@||securepubads.g.doubleclick.net/tag/js/gpt.js$domain=golf.com
+! uBO-redirect work around vpnstunnel.com
+@@||google.com/adsense/start/images/favicon.ico$image,domain=vpnstunnel.com
 ! uBO-redirect work around ovagames.com 
 @@||pagead2.googlesyndication.com/pagead/js/adsbygoogle.js$script,domain=ovagames.com
 ! uBO-redirect work around livehindustan.com
-@@||pagead2.googlesyndication.com/pagead/js/adsbygoogle.js$domain=livehindustan.com|hindustantimes.com
+@@||pagead2.googlesyndication.com/pagead/js/adsbygoogle.js$domain=livehindustan.com
+! uBO-redirect work around hindustantimes.com
+@@||securepubads.g.doubleclick.net/tag/js/gpt.js$domain=hindustantimes.com
+! uBO-redirect work around livexlive.com (IOS, Desktop)
+@@||imasdk.googleapis.com/js/sdkloader/ima3.js$script,domain=livexlive.com
+@@||www.googletagservices.com/tag/js/gpt.js$script,domain=livexlive.com
+@@||securepubads.g.doubleclick.net^$script,domain=livexlive.com
+! uBO-redirect work around rp5.ru
+@@||pagead2.googlesyndication.com/pagead/js/adsbygoogle.js$domain=rp5.ru
+! uBO-redirect work around onlinefreecourse.net 
+@@||pagead2.googlesyndication.com/pagead/js/adsbygoogle.js$xmlhttprequest,domain=onlinefreecourse.net
+! uBO-redirect work around photopea.com
+@@||pagead2.googlesyndication.com/pagead/js/adsbygoogle.js$domain=photopea.com
 ! Fix Playback on http://v6.player.abacast.net/6508 (https://community.brave.com/t/problem-loading-http-v6-player-abacast-net-6508/71822)
 @@||imasdk.googleapis.com/js/core/$subdocument,domain=player.abacast.net
 @@||imasdk.googleapis.com/js/sdkloader/ima3.js$script,domain=player.abacast.net
 ! Potential Tracker, Annoyance
 ||govdelivery.com^$third-party
+! Whatleaks nullifer
+$websocket,domain=whatleaks.com 
+whatleaks.com##+js(acis, init_port_check_waiting)
 ! Anti-Brave checks
-krunker.io,filecr.com,lyckansforskola.com,gommonauti.it,gugo.site,sybertrek.com,btdig.com,archive.is,archive.today,archive.vn,archive.fo,archive.md,archive.li,archive.ph,archivecaslytosk.onion,archiveiya74codqgiixo33q62qlrqtkgmcitqx5u2oeqnmn5bpcbiyd.onion##+js(aopw, navigator.brave)
+krunker.io,filecr.com,lyckansforskola.com,gommonauti.it,nowtype.com.br,gugo.site,sybertrek.com,btdig.com,archive.is,archive.today,archive.vn,archive.fo,archive.md,archive.li,archive.ph,archivecaslytosk.onion,archiveiya74codqgiixo33q62qlrqtkgmcitqx5u2oeqnmn5bpcbiyd.onion##+js(aopw, navigator.brave)
 archive.is,btdig.com,archive.today,archive.vn,archive.fo,archive.md,archive.li,archive.ph,archiveiya74codqgiixo33q62qlrqtkgmcitqx5u2oeqnmn5bpcbiyd.onion##+js(acis, document.cookie, document.location.href)
 ! Anti-Brave checks (jaysndees.com)
 jaysndees.com##+js(acis, detectBBrowser)
 ! Anti-Brave checks (bellasephina.com/tecknity.com/ebook-searcher.com)
-bellasephina.com,tecknity.com,ebook-searcher.com##+js(acis, request)
+texas-time-gifts.com,attleer.top,2gilberta.top,rwillk.top,i-rotary.com,ach-photos.com,bellasephina.com,tecknity.com,ebook-searcher.com##+js(acis, request)
 ! Anti-Brave checks (uploadbank.com)
 ||uploadbank.com/js/checkbrave.js
 uploadbank.com##+js(set, XMLHttpRequest, noopFunc)
+! globalnews.ca Anti-adblock
+@@||globalnews.ca^$ghide
+globalnews.ca##.l-headerAd__container
+globalnews.ca##.c-newsletterSignup
 ! y2mate popup 
 y2mate.com##+js(acis, spro)
 y2mate.com##+js(acis, clickAds)
@@ -284,80 +327,35 @@ nytimes.com##+js(acis, document.cookie, PURR_COOKIE_NAME)
 ! Fix foxnews video playback
 @@||imasdk.googleapis.com/js/sdkloader/ima3.js$script,domain=foxbusiness.com|foxnews.com
 @@||fncstatic.com/static/isa/app/lib/VisitorAPI.js$script,domain=foxbusiness.com|foxnews.com
-! Adblock-Tracking: foxnews.com / foxbusiness.com
-||fncstatic.com^*/google-funding-choices.js$script,domain=foxbusiness.com|foxnews.com
-||foxnews.com/static/strike/scripts/libs/google.funding.choices.js$script,domain=foxnews.com
-@@||fncstatic.com/static/v/all/js/ads.js$script,domain=foxbusiness.com|foxnews.com
 ! Temp fix for Google funding Yellow Bar (https://github.com/brave/brave-browser/issues/11945)
 ##div[style*="box-shadow: rgb(136, 136, 136) 0px 0px 12px; color: "]
-! Fix googlefunding issues (Android) https://github.com/uBlockOrigin/uAssets/blob/master/filters/filters.txt#L21331
-||fundingchoicesmessages.google.com^$third-party,badfilter
 ! To counter $ghide in uBO
 geekzone.co.nz,elpais.com,abc.es,lapresse.ca##div[style*="box-shadow: rgb(136, 136, 136) 0px 0px 12px; color: "]
-geekzone.co.nz##.fc-ab-root > .fc-dialog-container
-! all3dp.com (google funding)
-@@||all3dp.com^$generichide
-all3dp.com##.ad-container--loaded
-all3dp.com##.ad-container--horizontal
-all3dp.com##.ad-container__provider
-! googlefunding (non-overlay, bottom window) as seen on geekzone.co.nz
-##.fc-ab-root > .fc-dialog-container
-! googlefunding popup
-nativeplanet.com,elmundo.es,abc.es,elpais.com,goodreturns.in,drivespark.com,gizbot.com,telva.com,geekzone.co.nz,lapresse.ca,all3dp.com,click.in,filmibeat.com,boldsky.com,careerindia.com##+js(acis, trustedTypes, console)
-nativeplanet.com,elmundo.es,abc.es,elpais.com,goodreturns.in,drivespark.com,gizbot.com,telva.com,lapresse.ca,click.in,filmibeat.com,boldsky.com,careerindia.com##+js(acis, JSON.stringify, instanceof)
+! Fix googlefunding issues (Android) https://github.com/uBlockOrigin/uAssets/blob/master/filters/filters.txt#L21331
 ! googlefunding (latimes.com) (fix scroll)
 latimes.com##body:style(overflow: auto !important;)
-! hide google fc popup and overlay
-latimes.com##.fc-dialog-container
-latimes.com##.fc-ab-root
-! Adblock-Tracking: vg247.com
-@@||vg247.com/wp-content/themes/vg247/scripts/AdsLoad.js$script,domain=vg247.com
+! googlefunding (foxnews / foxbusiness)
+||foxnews.com^*choices.js$script,domain=foxnews.com|foxbusiness.com
 ! Anti-adblock: indiatimes.com / timesofindia.com
 @@||indiatimes.com/ads.cms$script,domain=indiatimes.com
 @@/ad-banner-zedo/*$image,domain=indiatimes.com|timesofindia.com
 @@||timesofindia.com/acms/$xmlhttprequest,domain=timesofindia.com
-! Adblock-Tracking:indiatoday.in
-@@||indiatoday.in/sites/all/modules/custom/itg_ads_blocker/js/ads.js$script,domain=indiatoday.in
 ! /track/view| fix for amazon tracking
 @@||amazon.*/shiptrack/view.html$~third-party
-! Adblock-Tracking: amazon.com + amazon regional
-@@||media-amazon.com^*/showads.$script,third-party
-! Adblock-Tracking: salon.com
-@@||salon.com/design/assets/ads.js$script,domain=salon.com
-! Adblock-Tracking: rocket-league.com
-@@||rocket-league.com/scripts/advert.js$script,domain=rocket-league.com
 ! Disable twitch.js (due to https://old.reddit.com/r/uBlockOrigin/comments/jlquxz/twitch_now_shows_this_if_you_have_ublock_enabled/ )
 twitch.tv#@#+js(twitch-videoad)
 ! Anti-adblock: Instart
-||nanovisor.io/i10c@p1^$xmlhttprequest,domain=webmd.com|gamespot.com
-||x2py3z.kgy.pockettactics.com^$xmlhttprequest,domain=pockettactics.com
-||9j7blw.jba.tribunnews.com^$xmlhttprequest,domain=tribunnews.com
-||sdad.guru/i10c@p1^$xmlhttprequest,domain=webmd.com
 ||vxq18c.g02.ign.com^$script,domain=ign.com
 ||earzxzsl.g02.ign.com^$subdocument,domain=ign.com
-||c-6rtwjumjzx7868x24x78jhzwjuzgfix78x2elx2eitzgqjhqnhpx2esjy.g01.webmd.com^$xmlhttprequest,domain=webmd.com
-||c-9pruhskhx78v49x24vhfx78uhsx78edgvx2ejx2egrx78eohfolfnx2eqhw.g01.webmd.com^$xmlhttprequest,domain=webmd.com
-||c-5uwzmx78pmca09x24amkczmx78cjilax2eox2elwcjtmktqksx2evmb.g00.gamespot.com^$script,domain=gamespot.com
-! Adblock-Tracking: infowars.com
-@@||infowars.com/ads.js$script,domain=infowars.com
 ! ebay.co.uk + ebay.com and other ebay regions (https://github.com/brave/brave-browser/issues/5019)
 @@||ebay.com/experience/listing_auto_complete/$xmlhttprequest
 ! ebay image upload issue (https://github.com/brave/brave-browser/issues/5190)
 @@||ebay.com/ws/$xmlhttprequest
 ! api.ebay.com (https://community.brave.com/t/referral-not-getting-download-and-comfirmed/75898)
 @@||api.ebay.com^$xmlhttprequest,subdocument
-! Adblock Tracking: thetimes.co.uk
-@@||thetimes.co.uk/d/js/ads-$script,domain=thetimes.co.uk
-! Anti-adblock: xiaomitoday.com
-@@||xiaomitoday.com/wp-content/themes/jannah/assets/js/advertisement.js$script,domain=xiaomitoday.com
 ! fix first-party items on maxmind.com (https://community.brave.com/t/stop-blocking-the-website-for-maxmind-com/68326)
 @@||blog.maxmind.com^$~third-party
 @@||static.maxmind.com^$~third-party
-! bandai-hobby.net (maxmind check causing blank pages)
-@@||js.maxmind.com/js/apis/geoip2/v2.1/geoip2.js$script,domain=bandai-hobby.net
-@@||geoip-js.maxmind.com/geoip/$xmlhttprequest,domain=bandai-hobby.net
-! KOR: Korean Adblock List problematic filters 
-/ad.js^$badfilter,domain=~betanews.net
 ! Korean adblock (cosmetic) 
 newtoki64.com##.basic-banner
 newtoki64.com##.board-tail-banner
@@ -365,12 +363,6 @@ newtoki64.com##.board-tail-banner
 @@||pandora.com/web-version/*/ads.json$xmlhttprequest,domain=pandora.com
 ! blockadblock 
 blockadblock.com##+js(nobab)
-! Anti-adblock: dagbladet.no
-@@||dagbladet.no^*/prebid.js$script,domain=dagbladet.no
-! Adblock-Tracking: hanime.tv
-@@||hanime.tv/exoclick.ads.$script,domain=hanime.tv
-! adziff ad tracking
-@@||adziff.com/ab/ads.js$xmlhttprequest,domain=pcmag.com|geek.com|extremetech.com
 ! Anti-adblock: gazzetta.it
 @@||rcsobjects.it^*/openx/$script,domain=gazzetta.it
 ! Anti-adblock: geoguessr.com
@@ -381,6 +373,11 @@ blockadblock.com##+js(nobab)
 @@||thgim.com/static/js/ads.min.js$script,domain=thehindu.com
 ! gifycat.com ads (https://community.brave.com/t/pages-loads-3rd-party-ads-after-page-loads/71472/10)
 ||ga.gfycat.com^$script,domain=gfycat.com
+! Cosmetic fixes (https://github.com/brave/brave-browser/issues/14825)
+! Counter blocked by extension warnings
+naver.com###veta_top
+naver.com###veta_branding
+naver.com##.banner_area
 ! Anti-Adblock: bild.de
 @@||asadcdn.com/adlib/$script,stylesheet,domain=bild.de
 ! Adblock-Tracking: (News corp AU sites)
@@ -405,15 +402,6 @@ lenta.ru,championat.com,passion.ru,wmj.ru,eda.ru,rambler.ru,motor.ru,autorambler
 @@||pbs.twimg.com/amplify_video_thumb/$image,third-party
 ! mycima.me
 mycima.me##+js(acis, Math, zfgloaded)
-! Anti-adblock tracking Prometheus Global Media
-@@||pgmcdn.com/advertisement.js$script,domain=billboard.com|hollywoodreporter.com|vibe.com
-! Adblock tradcking: defenseone.com
-@@||defenseone.com/b/js/adframe.js$script,domain=defenseone.com
-! Anti-adblock: washingtonpost.com
-@@||d2ty8gaf6rmowa.cloudfront.net/ad/$domain=washingtonpost.com
-@@||pubads.g.doubleclick.net^$xmlhttprequest,domain=washingtonpost.com
-! Anti-adblock tracking: abc.com
-@@||edgedatg.com^*/ads.min.js$script,domain=abc.com
 ! Fix consent issue on porsche.com (IOS)
 @@||googletagmanager.com/gtm.js$script,domain=porsche.com
 ! Fix abcnews.go.com video playback
@@ -734,7 +722,6 @@ mail.ru##.tgb__link
 mail.ru##.trg-banners
 mail.ru##.trg-b-banner
 ! livejournal fix
-||livejournal.naydex.net^$xmlhttprequest,domain=livejournal.com
 livejournal.com##+js(aopr, window.webpackJsonpSSPjs)
 livejournal.com##+js(aopr, webpackJsonpSSPjs)
 ! Chinese specific rules
