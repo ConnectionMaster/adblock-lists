@@ -1184,5 +1184,16 @@
             "brave_testing1",
             "brave_testing2"
         ]
+    },
+    {
+        "include": [
+            "*://www.axs.com/*"
+        ],
+        "exclude": [
+
+        ],
+        "params": [
+            "aff"
+        ]
     }
 ]
